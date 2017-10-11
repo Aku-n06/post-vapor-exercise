@@ -26,6 +26,8 @@ extension Droplet {
 
         post("addPost", handler: mc.addPost)
 
+        get("getPosts", handler: mc.getPosts)
+
     }
     
 }

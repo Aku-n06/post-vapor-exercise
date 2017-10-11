@@ -28,14 +28,15 @@ final class Post: Model {
     /// Initializes the Post from the
     /// database row
     init(row: Row) throws {
-        content = try row.get(Post.Keys.content)
+        content = try row.get("content")
         userId = try row.get("userId")
     }
 
     // Serializes the Post to the database
     func makeRow() throws -> Row {
         var row = Row()
-        try row.set(Post.Keys.content, content)
+        try row.set("content", content)
+        try row.set("userId", userId)
         return row
     }
 }
@@ -48,7 +49,8 @@ extension Post: Preparation {
     static func prepare(_ database: Database) throws {
         try database.create(self) { builder in
             builder.id()
-            builder.string(Post.Keys.content)
+            builder.string("content")
+            builder.string("userId")
         }
     }
 
