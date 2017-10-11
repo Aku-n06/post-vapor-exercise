@@ -44,11 +44,43 @@ final class UsersController {
                 throw Abort(.notFound, reason: "error getting the user")
         }
 
+        if user == nil {
+            throw Abort(.notFound, reason: "wrong username or password")
+        }
+
         let token = try MyToken.generate(for: user!)
         try token.save()
 
         return token.token
     }
 
+    func userWithToken(_ req : Request) throws -> MyUser {
+
+        guard let string = req.headers["token"]?.string
+            else {
+                throw Abort(.unauthorized, reason: "wrong token")
+        }
+
+        guard let token = try? MyToken.makeQuery().filter("token", string).first()
+            else {
+                throw Abort(.unauthorized, reason: "token error")
+        }
+
+        guard token != nil, let userId = token?.userId
+        else {
+            throw Abort(.unauthorized, reason: "token error")
+        }
+
+        guard let user = try? MyUser.makeQuery().filter("id", userId).first()
+        else {
+            throw Abort(.unauthorized, reason: "user not found")
+        }
+
+        if user == nil {
+            throw Abort(.notFound, reason: "user not found")
+        }
+
+        return user!
+    }
 }
 

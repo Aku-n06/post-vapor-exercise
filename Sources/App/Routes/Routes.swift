@@ -37,7 +37,9 @@ extension Droplet {
 
         get("me") { req in
             // return the authenticated user's name
-            return try req.user().username
+            let user = try uc.userWithToken(req)
+
+            return "username : \(user.username)"
         }
 
         // MARK: - PeopleController handlers
