@@ -7,6 +7,7 @@ extension Droplet {
     func setupRoutes() throws {
 
         let uc = UsersController()
+        let mc = MessageController()
 
         // MARK: - Authentications
 
@@ -22,6 +23,8 @@ extension Droplet {
         post("signIn", handler: uc.signIn)
 
         post("logIn", handler: uc.logIn)
+
+        post("addPost", handler: mc.addPost)
 
     }
     

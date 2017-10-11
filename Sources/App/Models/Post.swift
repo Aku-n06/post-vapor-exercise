@@ -9,6 +9,7 @@ final class Post: Model {
     
     /// The content of the post
     var content: String
+    var userId: Identifier
     
     /// The column names for `id` and `content` in the database
     struct Keys {
@@ -17,8 +18,9 @@ final class Post: Model {
     }
 
     /// Creates a new Post
-    init(content: String) {
+    init(content: String, userId: Identifier) {
         self.content = content
+        self.userId = userId
     }
 
     // MARK: Fluent Serialization
@@ -27,6 +29,7 @@ final class Post: Model {
     /// database row
     init(row: Row) throws {
         content = try row.get(Post.Keys.content)
+        userId = try row.get("userId")
     }
 
     // Serializes the Post to the database
@@ -65,7 +68,8 @@ extension Post: Preparation {
 extension Post: JSONConvertible {
     convenience init(json: JSON) throws {
         self.init(
-            content: try json.get(Post.Keys.content)
+            content: try json.get(Post.Keys.content),
+            userId: try json.get("userId")
         )
     }
     
