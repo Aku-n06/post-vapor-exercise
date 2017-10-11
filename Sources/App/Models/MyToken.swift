@@ -7,6 +7,7 @@
 
 import Vapor
 import FluentProvider
+import Crypto
 
 final class MyToken: Model {
     let storage = Storage()
@@ -54,5 +55,16 @@ extension MyToken: Preparation {
     /// Undoes what was done in `prepare`
     static func revert(_ database: Database) throws {
         try database.delete(MyToken.self)
+    }
+}
+
+extension MyToken {
+    /// Generates a new token for the supplied User.
+    static func generate(for user: MyUser) throws -> MyToken {
+        // generate 128 random bits using OpenSSL
+        let random = try Crypto.Random.bytes(count: 16)
+
+        // create and return the new token
+        return try MyToken(string: random.base64Encoded.makeString(), user: user)
     }
 }

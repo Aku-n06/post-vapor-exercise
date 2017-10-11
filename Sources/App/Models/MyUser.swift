@@ -26,7 +26,7 @@ final class MyUser: Model {
     /// Initializes the User from the
     /// database row
     init(row: Row) throws {
-        username = try row.get("name")
+        username = try row.get("username")
         password = try row.get("password")
     }
 

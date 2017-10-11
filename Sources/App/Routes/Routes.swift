@@ -9,6 +9,10 @@ extension Droplet {
         let pc = PeopleController()
         let uc = UsersController()
 
+        let tokenMiddleware = TokenAuthenticationMiddleware(MyUser.self)
+        /// use this route group for protected routes
+        let authed = self.grouped(tokenMiddleware)
+
         get("hello") { req in
             var json = JSON()
             try json.set("hello", "world")
@@ -43,7 +47,9 @@ extension Droplet {
         post("add", handler: pc.addPerson)
 
         post("signIn", handler: uc.signIn)
-        
+
+        post("logIn", handler: uc.logIn)
 
     }
+    
 }
