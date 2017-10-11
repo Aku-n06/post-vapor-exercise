@@ -43,7 +43,7 @@ final class MessageController {
 
         guard posts.count != 0
             else {
-                throw Abort(.unauthorized, reason: "no posts found")
+                return "no posts"
         }
 
         var postList = Array<String>()
